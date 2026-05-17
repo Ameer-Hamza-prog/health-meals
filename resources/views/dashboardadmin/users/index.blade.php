@@ -1,123 +1,48 @@
 @extends('layouts.admindashboard')
 
-@section('contact')
-<div class="container py-5">
-    <h2 class="mb-5 text-center fw-bold text-primary">قائمة المستخدمين</h2>
-
-    {{-- الرسائل --}}
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm rounded" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="إغلاق"></button>
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> يوجد بعض الأخطاء:
-            <ul class="mb-0 mt-2 ps-3">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="إغلاق"></button>
-        </div>
-    @endif
-
-    {{-- بحث --}}
-    <form method="GET" action="{{ route('users.index') }}" class="d-flex justify-content-center mb-4 gap-2 flex-wrap">
-        <input type="search" name="search" value="{{ $search }}" class="form-control shadow-sm rounded-pill px-4" placeholder="ابحث باسم المستخدم أو البريد الإلكتروني" style="max-width: 350px;" />
-        <button type="submit" class="btn btn-primary shadow-sm rounded-pill px-4">
-            <i class="bi bi-search me-1"></i> بحث
-        </button>
-    </form>
-
-    {{-- زر الإضافة --}}
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-        <a href="{{ route('users.create') }}" class="btn btn-success shadow-sm rounded-pill px-4 fw-semibold d-flex align-items-center gap-2">
-            <i class="bi bi-plus-lg"></i> إضافة مستخدم جديد
-        </a>
-        <small class="text-muted">إجمالي المستخدمين: <span class="fw-bold">{{ $users->total() }}</span></small>
+@section('content')
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">?? User Management</h1>
+        <a href="{{ route('users.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">+ Add User</a>
     </div>
 
-    {{-- جدول --}}
-    <div class="table-responsive shadow rounded" style="overflow-x:auto;">
-        <table class="table align-middle text-center mb-0" style="min-width: 600px;">
-            <thead class="table-primary text-primary fs-6 text-uppercase">
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <table class="w-full">
+            <thead class="bg-gray-50 border-b">
                 <tr>
-                    <th scope="col" class="fw-semibold">الاسم</th>
-                    <th scope="col" class="fw-semibold">البريد الإلكتروني</th>
-                    <th scope="col" class="fw-semibold">الدور</th>
-                    <th scope="col" class="fw-semibold">الإجراءات</th>
+                    <th class="text-left p-4 text-gray-600 font-medium">Name</th>
+                    <th class="text-left p-4 text-gray-600 font-medium">Email</th>
+                    <th class="text-left p-4 text-gray-600 font-medium">Role</th>
+                    <th class="text-left p-4 text-gray-600 font-medium">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($users as $user)
-                <tr class="align-middle">
-                    <td class="text-truncate" style="max-width: 180px;">{{ $user->name }}</td>
-                    <td class="text-truncate" style="max-width: 250px;">{{ $user->email }}</td>
-                    <td>
-                        @if($user->role === 'admin')
-                            <span class="badge bg-danger px-3 py-2 fs-6">أدمن</span>
-                        @else
-                            <span class="badge bg-secondary px-3 py-2 fs-6">مستخدم</span>
-                        @endif
+                @foreach($users as $user)
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                {{ substr($user->name, 0, 1) }}
+                            </div>
+                            {{ $user->name }}
+                        </div>
                     </td>
-                    <td class="d-flex justify-content-center gap-2">
-                        <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-outline-primary shadow-sm rounded-circle p-2" title="تعديل">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-
-                        <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف المستخدم؟');" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm rounded-circle p-2" title="حذف">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
+                    <td class="p-4 text-gray-600">{{ $user->email }}</td>
+                    <td class="p-4">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">{{ $user->role ?? 'User' }}</span>
+                    </td>
+                    <td class="p-4 flex gap-2">
+                        <a href="{{ route('users.edit', $user->id) }}" class="text-blue-600 hover:text-blue-800 text-sm">Edit</a>
+                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
-                @empty
-                <tr>
-                    <td colspan="4" class="text-muted py-4 fs-5">لا يوجد مستخدمين</td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>
-
-    {{-- التصفح --}}
-    <div class="d-flex justify-content-center mt-4">
-        {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
-    </div>
 </div>
-
-{{-- إضافة بعض الـ CSS المخصصة لتحسين اللمسات --}}
-<style>
-    /* تأثير عند تمرير الفأرة على صف الجدول */
-    table.table tbody tr:hover {
-        background-color: #f1f9ff;
-        transition: background-color 0.3s ease;
-    }
-    /* input البحث */
-    input.form-control {
-        border: 2px solid #0d6efd;
-        transition: border-color 0.3s ease;
-    }
-    input.form-control:focus {
-        border-color: #0a58ca;
-        box-shadow: 0 0 6px #0a58caaa;
-    }
-    /* أزرار دائرية */
-    .btn-outline-primary:hover {
-        background-color: #0d6efd;
-        color: #fff;
-        box-shadow: 0 2px 8px #0d6efd80;
-    }
-    .btn-outline-danger:hover {
-        background-color: #dc3545;
-        color: #fff;
-        box-shadow: 0 2px 8px #dc354580;
-    }
-</style>
 @endsection

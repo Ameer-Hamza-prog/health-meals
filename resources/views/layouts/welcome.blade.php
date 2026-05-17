@@ -22,6 +22,40 @@
 <!-- Main CSS File -->
 <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
 </head>
+<style>
+    /* This CSS only applies to welcome page because of the specific body class */
+    body.index-page #header .auth-buttons .auth-btn {
+        /* Make buttons smaller */
+        padding: 8px 16px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        min-width: 90px !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease !important;
+        
+        /* Make all buttons same red color */
+        border: 2px solid #dc2626 !important;
+        background: transparent !important;
+        color: #dc2626 !important;
+        margin: 0 5px !important;
+    }
+    
+    body.index-page #header .auth-buttons .auth-btn:hover {
+        background: #dc2626 !important;
+        color: white !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* Make sure we don't affect any other pages */
+    body:not(.index-page) .auth-btn,
+    .guest-layout .auth-btn,
+    [x-data] .auth-btn {
+        all: revert !important;
+    }
+</style>
 
 <body class="index-page">
 
@@ -66,6 +100,11 @@
       </nav>
 
       <a class="btn-getstarted" href="index.html#book-a-table">Book a Table</a>
+      <div class="auth-buttons">
+        <a href="{{ route('login') }}" class="auth-btn auth-login">Login</a>
+        <a href="{{ route('register') }}" class="auth-btn auth-register">Register</a>
+        <a href="{{ route('restaurant.login') }}" class="auth-btn auth-restaurant">Restaurant</a>
+      </div>
 
     </div>
   </header>

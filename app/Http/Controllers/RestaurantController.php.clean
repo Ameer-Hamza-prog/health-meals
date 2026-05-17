@@ -1,0 +1,30 @@
+// ... previous code ...
+
+    public function loginrestrunts(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $restaurant = Restaurant::where('email', $request->email)->first();
+
+        if (!$restaurant) {
+            return back()->withErrors(['email' => 'البريد الإلكتروني غير صحيح']);
+        }
+
+        if ($restaurant->status !== 'approved') {
+            return back()->withErrors(['email' => 'لم يتم الموافقة على الحساب بعد']);
+        }
+
+        if (!Hash::check($request->password, $restaurant->password)) {
+            return back()->withErrors(['password' => 'كلمة المرور غير صحيحة']);
+        }
+
+        // تسجيل دخول يدوي باستخدام session
+        session(['restaurant_id' => $restaurant->id]);
+
+        return redirect()->route('restaurant.dashboard'); // المسار للوحة المطعم
+    }
+
+// ... rest of the file ...

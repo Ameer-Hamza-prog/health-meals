@@ -1,91 +1,50 @@
-<!doctype html>
-<html lang="ar">
+@extends('layouts.guest')
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SeoDash إنشاء حساب</title>
-  <link rel="shortcut icon" type="image/png" href="{{ asset('build/assets/images/logos/seodashlogo.png') }}" />
-  <link rel="stylesheet" href="{{ asset('build/assets/css/styles.min.css') }}" />
-</head>
+@section('content')
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-<body>
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6"
-    data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-    <div
-      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
-      <div class="d-flex align-items-center justify-content-center w-100">
-        <div class="row justify-content-center w-100">
-          <div class="col-md-8 col-lg-6 col-xxl-3">
-            <div class="card mb-0">
-              <div class="card-body">
-                <a href="{{ url('/') }}" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                  <img src="{{ asset('build/assets/images/logos/logo-light.svg') }}" alt="" />
-                </a>
-                <p class="text-center">إنشاء حساب جديد</p>
-<form method="POST" action="{{ route('register') }}">
-  @csrf
-
-  <div class="mb-3">
-    <label for="name" class="form-label">الاسم</label>
-    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required autofocus />
-    @error('name')
-        <div class="text-danger mt-1">{{ $message }}</div>
-    @enderror
-  </div>
-
-  <div class="mb-3">
-    <label for="email" class="form-label">عنوان البريد الإلكتروني</label>
-    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required />
-    @error('email')
-        <div class="text-danger mt-1">{{ $message }}</div>
-    @enderror
-  </div>
-
-  <div class="mb-3">
-    <label for="password" class="form-label">كلمة المرور</label>
-    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required autocomplete="new-password" />
-    @error('password')
-        <div class="text-danger mt-1">{{ $message }}</div>
-    @enderror
-  </div>
-
-  <div class="mb-3">
-    <label for="password_confirmation" class="form-label">تأكيد كلمة المرور</label>
-    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required />
-  </div>
-
-  <div class="mb-4">
-    <label for="role" class="form-label">نوع المستخدم</label>
-    <select name="role" id="role" class="form-control @error('role') is-invalid @enderror" required>
-      <option value="">اختر نوع المستخدم</option>
-      <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>أدمن</option>
-      <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>مستخدم عادي</option>
-    </select>
-    @error('role')
-        <div class="text-danger mt-1">{{ $message }}</div>
-    @enderror
-  </div>
-
-  <button type="submit" class="btn btn-primary w-100 py-3 fs-4 mb-4">إنشاء حساب</button>
-
-  <div class="d-flex align-items-center justify-content-center">
-    <p class="fs-4 mb-0 fw-bold me-2">هل لديك حساب بالفعل؟</p>
-    <a href="{{ route('login') }}" class="btn btn-outline-primary">تسجيل الدخول</a>
-  </div>
-</form>
-
-              </div>
-            </div>
-          </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
+                   name="name" value="{{ old('name') }}" required autofocus>
+            @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
-      </div>
-    </div>
-  </div>
 
-  <script src="{{ asset('build/assets/libs/jquery/dist/jquery.min.js') }}"></script>
-  <script src="{{ asset('build/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
-</body>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
+                   name="email" value="{{ old('email') }}" required>
+            @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-</html>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                   name="password" required>
+            @error('password')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirm Password</label>
+            <input id="password_confirmation" type="password" class="form-control" 
+                   name="password_confirmation" required>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{{ route('login') }}" class="text-decoration-none">
+                Already registered?
+            </a>
+            
+            <button type="submit" class="btn btn-primary px-4">
+                Register
+            </button>
+        </div>
+    </form>
+@endsection

@@ -1,0 +1,7 @@
+<script>
+window.onerror = function(msg, url, line) {
+    alert('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + line);
+    return true;
+};
+</script>
+<iframe src="/login" width="100%" height="500px" onload="console.log('Login page loaded')"></iframe>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Login Test</title>
+</head>
+<body>
+    <h1>Testing if PHP works</h1>
+    <form action="/login" method="POST">
+        <input type="hidden" name="_token" value="test">
+        <input type="email" name="email" placeholder="Email">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Test Submit</button>
+    </form>
+    <p><a href="/login">Go to real login page</a></p>
+</body>
+</html>

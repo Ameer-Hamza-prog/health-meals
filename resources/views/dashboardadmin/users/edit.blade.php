@@ -1,96 +1,48 @@
 @extends('layouts.admindashboard')
 
-@section('contact')
-<div class="container">
-    <h2>تعديل بيانات المستخدم</h2>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('users.update', $user) }}">
-        @csrf
-        @method('PUT')
-
-        <div class="mb-3">
-            <label for="name" class="form-label">الاسم</label>
-            <input
-                type="text"
-                class="form-control @error('name') is-invalid @enderror"
-                id="name"
-                name="name"
-                value="{{ old('name', $user->name) }}"
-                required
-                autofocus
-            />
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+@section('content')
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Edit User</h2>
+                <p class="text-gray-500 text-sm">Update user information</p>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">البريد الإلكتروني</label>
-            <input
-                type="email"
-                class="form-control @error('email') is-invalid @enderror"
-                id="email"
-                name="email"
-                value="{{ old('email', $user->email) }}"
-                required
-            />
-            @error('email')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="role" class="form-label">الدور</label>
-            <select
-                name="role"
-                id="role"
-                class="form-control @error('role') is-invalid @enderror"
-                required
-            >
-                <option value="">اختر الدور</option>
-                <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>مستخدم عادي</option>
-                <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>أدمن</option>
-            </select>
-            @error('role')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">كلمة المرور (اتركه فارغًا إذا لم ترغب بتغييره)</label>
-            <input
-                type="password"
-                class="form-control @error('password') is-invalid @enderror"
-                id="password"
-                name="password"
-            />
-            @error('password')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">تأكيد كلمة المرور</label>
-            <input
-                type="password"
-                class="form-control"
-                id="password_confirmation"
-                name="password_confirmation"
-            />
-        </div>
-
-        <button type="submit" class="btn btn-primary">تحديث</button>
-        <a href="{{ route('users.index') }}" class="btn btn-secondary">إلغاء</a>
-    </form>
+        <form action="{{ route('users.update', $user->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input type="text" name="name" value="{{ $user->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input type="email" name="email" value="{{ $user->email }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                    <select name="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                        <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="restaurant" {{ $user->role == 'restaurant' ? 'selected' : '' }}>Restaurant</option>
+                    </select>
+                </div>
+                
+                <div class="pt-4 border-t border-gray-100 flex gap-3">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">Update User</button>
+                    <a href="{{ route('users.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg transition">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

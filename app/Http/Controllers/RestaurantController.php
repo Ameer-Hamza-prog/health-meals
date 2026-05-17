@@ -171,22 +171,20 @@ public function showLoginForm()
 
 
 public function loginrestrunts(Request $request)
-{
-    $request->validate([
-        'username' => 'required|string',
-        'password' => 'required|string',
-    ]);
+    {
+        $request->validate([
+            "email" => "required|email",
+            "password" => "required|string",
+        ]);
 
-    $restaurant = Restaurant::where('username', $request->username)
-        ->orWhere('email', $request->username)
-        ->first();
+        $restaurant = Restaurant::where("email", $request->email)->first();
 
     if (!$restaurant) {
-        return back()->withErrors(['username' => 'اسم المستخدم أو البريد غير صحيح']);
+        return back()->withErrors(['email' => 'اسم المستخدم أو البريد غير صحيح']);
     }
 
     if ($restaurant->status !== 'approved') {
-        return back()->withErrors(['username' => 'لم يتم الموافقة على الحساب بعد']);
+        return back()->withErrors(['email' => 'لم يتم الموافقة على الحساب بعد']);
     }
 
     if (!Hash::check($request->password, $restaurant->password)) {

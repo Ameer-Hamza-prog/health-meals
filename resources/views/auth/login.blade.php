@@ -1,97 +1,61 @@
-<!doctype html>
-<html lang="ar">
+@extends("layouts.guest")
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SeoDash تسجيل دخول</title>
-  <link rel="shortcut icon" type="image/png" href="{{ asset('build/assets/images/logos/seodashlogo.png') }}" />
-  <link rel="stylesheet" href="{{ asset('build/assets/css/styles.min.css') }}" />
-  <style>
-    /* تنسيق زر إظهار/إخفاء كلمة السر */
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      user-select: none;
-      font-size: 1.2rem;
-      color: #6c757d;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- Wrapper الجسم -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <div
-      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
-      <div class="d-flex align-items-center justify-content-center w-100">
-        <div class="row justify-content-center w-100">
-          <div class="col-md-8 col-lg-6 col-xxl-3">
-            <div class="card mb-0">
-              <div class="card-body">
-                <a href="{{ url('/') }}" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                  <img src="{{ asset('build/assets/images/logos/logo-light.svg') }}" alt="">
-                </a>
-                <p class="text-center"> تسجيل دخول </p>
-
-                <form method="POST" action="{{ route('login') }}">
-                  @csrf
-                  <div class="mb-3">
-                    <label for="email" class="form-label">البريد الإلكتروني</label>
-                    <input type="email" name="email" class="form-control" id="email" required autofocus />
-                  </div>
-                  <div class="mb-4 password-wrapper">
-                    <label for="password" class="form-label">كلمة المرور</label>
-                    <input type="password" name="password" class="form-control" id="password" required autocomplete="current-password" />
-                    <span class="toggle-password" id="togglePassword" title="إظهار/إخفاء كلمة السر">&#128065;</span>
-                  </div>
-
-                  <div class="d-flex align-items-center justify-content-between mb-4">
-                    <div class="form-check">
-                      <input class="form-check-input primary" type="checkbox" name="remember" id="remember" />
-                      <label class="form-check-label text-dark" for="remember">
-                        تذكر هذا الجهاز
-                      </label>
-                    </div>
-                    @if (Route::has('password.request'))
-                      <a class="text-primary fw-bold" href="{{ route('password.request') }}">
-                        هل نسيت كلمة المرور؟
-                      </a>
-                    @endif
-                  </div>
-
-                  <button type="submit" class="btn btn-primary w-100 py-3 fs-4 mb-4">تسجيل الدخول</button>
-                </form>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+@section("content")
+<div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 mx-auto mt-10">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Welcome Back</h1>
+        <p class="text-gray-600 mt-2">Sign in to your account</p>
     </div>
-  </div>
 
-  <script src="{{ asset('build/assets/libs/jquery/dist/jquery.min.js') }}"></script>
-  <script src="{{ asset('build/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    @if (session("status"))
+        <div class="bg-green-100 text-green-700 p-3 rounded-lg mb-4 text-sm">
+            {{ session("status") }}
+        </div>
+    @endif
 
-  <script>
-    const togglePassword = document.querySelector('#togglePassword');
-    const passwordInput = document.querySelector('#password');
+    <form method="POST" action="{{ route("login") }}">
+        @csrf
 
-    togglePassword.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
-    });
-  </script>
-</body>
+        <div class="mb-5">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input type="email" name="email" value="{{ old("email") }}"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500">
+            @error("email")
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
 
-</html>
+        <div class="mb-5">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" name="password"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500">
+            @error("password")
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="flex items-center justify-between mb-6">
+            <label class="flex items-center text-sm">
+                <input type="checkbox" name="remember" class="w-4 h-4 text-emerald-600">
+                <span class="ml-2 text-gray-600">Remember me</span>
+            </label>
+            
+            @if (Route::has("password.request"))
+                <a href="{{ route("password.request") }}" class="text-sm text-emerald-600 hover:underline">
+                    Forgot Password?
+                </a>
+            @endif
+        </div>
+
+        <button type="submit"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl transition">
+            Log In
+        </button>
+    </form>
+
+    <p class="text-center text-sm text-gray-600 mt-6">
+        Don`t have an account? 
+        <a href="{{ route("register") }}" class="text-emerald-600 hover:underline font-medium">Register here</a>
+    </p>
+</div>
+@endsection

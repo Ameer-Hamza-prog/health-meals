@@ -1,76 +1,30 @@
 @extends('layouts.admindashboard')
 
-@section('contact')
-<div class="container py-4">
-    <h2 class="mb-4 text-primary fw-bold">النظم الغذائية</h2>
+@section('content')
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">?? Diet Management</h1>
+        <a href="{{ route('diets.create') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">+ Add Diet</a>
+    </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="إغلاق"></button>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($diets as $diet)
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition p-6 border-l-4 border-emerald-500">
+            <h3 class="text-lg font-bold text-gray-800">{{ $diet->name }}</h3>
+            <p class="text-gray-600 text-sm mt-2">{{ $diet->description ?? 'No description' }}</p>
+            <div class="mt-4 flex gap-2">
+                <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">?? {{ $diet->calories ?? 'N/A' }} cal</span>
+                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">?? {{ $diet->protein ?? 'N/A' }}g protein</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+                <a href="{{ route('diets.edit', $diet->id) }}" class="text-blue-600 hover:text-blue-800 text-sm">Edit</a>
+                <form action="{{ route('diets.destroy', $diet->id) }}" method="POST" class="inline">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm">Delete</button>
+                </form>
+            </div>
         </div>
-    @endif
-
-    <div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-        <form method="GET" action="{{ route('diets.index') }}" class="d-flex flex-grow-1" role="search" aria-label="بحث النظم الغذائية">
-            <input
-                type="search"
-                name="search"
-                value="{{ $search }}"
-                class="form-control rounded-pill shadow-sm border-0"
-                placeholder="ابحث باسم النظام الغذائي أو الوصف"
-                aria-label="بحث"
-            />
-            <button type="submit" class="btn btn-primary ms-2 px-4 rounded-pill shadow-sm">بحث</button>
-        </form>
-
-        <a href="{{ route('diets.create') }}" class="btn btn-success px-4 rounded-pill shadow-sm flex-shrink-0">
-            إضافة نظام غذائي جديد
-        </a>
-    </div>
-
-    <div class="table-responsive shadow-sm rounded-3">
-        <table class="table table-hover align-middle text-center mb-0" style="min-width: 320px;">
-            <thead class="table-light text-primary">
-                <tr>
-                    <th scope="col" class="fw-semibold">الاسم</th>
-                    <th scope="col" class="fw-semibold">الوصف</th>
-                    <th scope="col" class="fw-semibold">الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($diets as $diet)
-                <tr>
-                    <td class="fw-semibold text-truncate" style="max-width: 180px;">{{ $diet->name }}</td>
-                    <td class="text-muted text-truncate" style="max-width: 300px;">{{ $diet->description ?? '-' }}</td>
-                    <td class="d-flex justify-content-center gap-2">
-                        <a href="{{ route('diets.edit', $diet) }}" class="btn btn-sm btn-outline-primary px-3 rounded-pill" title="تعديل">
-                            تعديل
-                        </a>
-                        <form
-                            action="{{ route('diets.destroy', $diet) }}"
-                            method="POST"
-                            onsubmit="return confirm('هل أنت متأكد من حذف النظام الغذائي؟')"
-                        >
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger px-3 rounded-pill" type="submit" title="حذف">
-                                حذف
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="3" class="text-muted fst-italic">لا يوجد نظم غذائية</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mt-4 d-flex justify-content-center">
-        {{ $diets->withQueryString()->links() }}
+        @endforeach
     </div>
 </div>
 @endsection

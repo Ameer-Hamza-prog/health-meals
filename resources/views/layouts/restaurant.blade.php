@@ -1,185 +1,246 @@
 <!doctype html>
-<html lang="ar">
-
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> لوحة التحكم </title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@yield('title', 'Restaurant Dashboard')</title>
+
+    <!-- THEME CSS -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('build/assets/images/logos/seodashlogo.png') }}" />
     <link rel="stylesheet" href="{{ asset('build/assets/css/styles.min.css') }}" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        /* Fix sidebar width and layout */
+        .left-sidebar {
+            width: 280px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1e2b 0%, #2d3340 100%);
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
 
+        .body-wrapper {
+            margin-right: 280px;
+            width: calc(100% - 280px);
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+
+        /* Brand logo */
+        .brand-logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-logo img {
+            max-height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Sidebar navigation */
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        #sidebarnav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-small-cap {
+            padding: 20px 20px 8px 20px;
+            color: #a0a6b5;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .nav-small-cap i {
+            margin-left: 8px;
+            font-size: 1rem;
+            color: #fd746c;
+        }
+
+        .sidebar-item {
+            margin: 2px 10px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #a0a6b5;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .sidebar-link i {
+            margin-left: 12px;
+            font-size: 1.2rem;
+            color: #a0a6b5;
+            transition: all 0.3s;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .sidebar-link:hover i {
+            color: #fd746c;
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, #fd746c 0%, #ff9068 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(253,116,108,0.3);
+        }
+
+        .sidebar-link.active i {
+            color: white;
+        }
+
+        .hide-menu {
+            flex: 1;
+        }
+
+        /* Header */
+        .app-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        /* Container */
+        .container-fluid {
+            padding: 20px 25px;
+        }
+
+        /* Scrollbar */
+        .left-sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .left-sidebar::-webkit-scrollbar-track {
+            background: #2d3340;
+        }
+
+        .left-sidebar::-webkit-scrollbar-thumb {
+            background: #fd746c;
+            border-radius: 10px;
+        }
+
+        /* Logout button */
+        .sidebar-item form button.sidebar-link {
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: right;
+            cursor: pointer;
+        }
+
+        .sidebar-item form button.sidebar-link:hover {
+            background: #c0392b;
+        }
+
+        .sidebar-item.mt-4 {
+            margin-top: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1199px) {
+            .left-sidebar {
+                transform: translateX(100%);
+                transition: transform 0.3s;
+            }
+            .left-sidebar.show {
+                transform: translateX(0);
+            }
+            .body-wrapper {
+                margin-right: 0;
+                width: 100%;
+            }
+            .app-header {
+                right: 0;
+            }
+        }
+
+        /* Cards styling */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .badge.bg-success { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+        .badge.bg-warning { background: linear-gradient(135deg, #f39c12, #f1c40f) !important; color: white; }
+        .badge.bg-primary { background: linear-gradient(135deg, #fd746c, #ff9068) !important; }
+    </style>
 </head>
-
 <body>
-    <!--  Body Wrapper -->
-    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed">
-        <!-- Sidebar Start -->
-        <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
-            <div>
-                <div class="brand-logo d-flex align-items-center justify-content-between">
-                    <a href="./index.html" class="text-nowrap logo-img">
-                        <img src="{{ asset('build/assets/images/logos/logo-light.svg') }}" alt="" />
-                    </a>
-                    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-                        <i class="ti ti-x fs-8"></i>
-                    </div>
-                </div>
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-                    <ul id="sidebarnav">
-                        <li class="nav-small-cap">
-                            <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
-                            <span class="hide-menu">الرئيسية</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./index.html" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:home-smile-bold-duotone" class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">لوحة التحكم</span>
-                            </a>
-                        </li>
-                        <li class="nav-small-cap">
-                            <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
-                            <span class="hide-menu">مكونات واجهة المستخدم</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ route('products.index') }}" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="mdi:food" class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">وجباتنا</span>
-                            </a>
-                        </li>
 
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-alerts.html" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:danger-circle-bold-duotone" class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">التنبيهات</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-card.html" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone"
-                                        class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">البطاقات</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:file-text-bold-duotone" class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">النماذج</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:text-field-focus-bold-duotone"
-                                        class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">الطباعة</span>
-                            </a>
-                        </li>
-                        <li class="nav-small-cap">
-                            <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-6"></iconify-icon>
-                            <span class="hide-menu">التوثيق</span>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                                <span>
-                                    <iconify-icon icon="solar:user-plus-rounded-bold-duotone"
-                                        class="fs-6"></iconify-icon>
-                                </span>
-                                <span class="hide-menu">التسجيل</span>
-                            </a>
-                        </li>
+<div class="page-wrapper" id="main-wrapper"
+     data-layout="vertical"
+     data-navbarbg="skin6"
+     data-sidebartype="full"
+     data-sidebar-position="fixed"
+     data-header-position="fixed">
 
-                    </ul>
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!--  Sidebar End -->
+    {{-- SIDEBAR --}}
+    @include('layouts.restaurant.sidebar')
 
-        <!--  Main wrapper -->
-        <div class="body-wrapper">
-            <!--  بداية الرأس -->
-            <header class="app-header">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <ul class="navbar-nav">
-                        <li class="nav-item d-block d-xl-none">
-                            <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse"
-                                href="javascript:void(0)">
-                                <i class="ti ti-menu-2"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                                <i class="ti ti-bell-ringing"></i>
-                                <div class="notification bg-primary rounded-circle"></div>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-                        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('build/assets/images/profile/user-1.jpg') }}" alt=""
-                                        width="35" height="35" class="rounded-circle">
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up"
-                                    aria-labelledby="drop2">
-                                    <div class="message-body">
-                                        <a href="{{ route('restaurant.profile.edit') }}"
-                                            class="d-flex align-items-center gap-2 dropdown-item">
-                                            <i class="ti ti-user fs-6"></i>
-                                            <p class="mb-0 fs-3">ملفي الشخصي</p>
-                                        </a>
-                                        <form method="POST" action="{{ route('restaurant.logout') }}"
-                                            class="mx-3 mt-2 d-block">
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-primary w-100">تسجيل
-                                                الخروج</button>
-                                        </form>
+    <div class="body-wrapper">
+        {{-- HEADER --}}
+        @include('layouts.restaurant.header')
 
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-            <!--  نهاية الرأس -->
-
-            <div class="container-fluid">
-                <div class="row">
-                    @yield('contact')
-                </div>
-            </div>
+        <div class="container-fluid">
+            @yield('content')
         </div>
-
-        <!-- Scripts -->
-        <script src="{{ asset('build/assets/libs/jquery/dist/jquery.min.js') }}"></script>
-        <script src="{{ asset('build/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('build/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
-        <script src="{{ asset('build/assets/libs/simplebar/dist/simplebar.js') }}"></script>
-        <script src="{{ asset('build/assets/js/sidebarmenu.js') }}"></script>
-        <script src="{{ asset('build/assets/js/app.min.js') }}"></script>
-        <script src="{{ asset('build/assets/js/dashboard.js') }}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     </div>
-</body>
+</div>
 
+<!-- THEME JS -->
+<script src="{{ asset('build/assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('build/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('build/assets/js/app.min.js') }}"></script>
+
+<script>
+    // Sidebar toggle for mobile
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('sidebarCollapse');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                document.querySelector('.left-sidebar').classList.toggle('show');
+            });
+        }
+    });
+</script>
+
+</body>
 </html>

@@ -1,0 +1,82 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Column -->
+        <div class="col-md-3 col-lg-2 px-0" style="background: #1a1e2b; min-height: 100vh;">
+            <div class="p-3">
+                <h4 class="text-white mb-4" style="color: white !important;">Health Meals</h4>
+                <hr style="border-color: #2d3340;">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a href="{{ url('/dashboard') }}" class="d-block py-2 px-3 rounded text-decoration-none {{ request()->is('dashboard') ? 'active' : '' }}" 
+                           style="color: {{ request()->is('dashboard') ? 'white' : '#a0a6b5' }} !important; 
+                                  background: {{ request()->is('dashboard') ? '#4f46e5' : 'transparent' }};">
+                            <i class="bi bi-house-door me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('diets.index') }}" class="d-block py-2 px-3 rounded text-decoration-none {{ request()->routeIs('diets.*') ? 'active' : '' }}"
+                           style="color: {{ request()->routeIs('diets.*') ? 'white' : '#a0a6b5' }} !important;
+                                  background: {{ request()->routeIs('diets.*') ? '#4f46e5' : 'transparent' }};">
+                            <i class="bi bi-egg-fried me-2"></i> Diets
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('restaurants.index') }}" class="d-block py-2 px-3 rounded text-decoration-none {{ request()->routeIs('restaurants.*') ? 'active' : '' }}"
+                           style="color: {{ request()->routeIs('restaurants.*') ? 'white' : '#a0a6b5' }} !important;
+                                  background: {{ request()->routeIs('restaurants.*') ? '#4f46e5' : 'transparent' }};">
+                            <i class="bi bi-shop me-2"></i> Restaurants
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{{ route('users.index') }}" class="d-block py-2 px-3 rounded text-decoration-none {{ request()->routeIs('users.*') ? 'active' : '' }}"
+                           style="color: {{ request()->routeIs('users.*') ? 'white' : '#a0a6b5' }} !important;
+                                  background: {{ request()->routeIs('users.*') ? '#4f46e5' : 'transparent' }};">
+                            <i class="bi bi-people me-2"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2 mt-4">
+                        <a href="{{ route('profile.edit') }}" class="d-block py-2 px-3 rounded text-decoration-none {{ request()->routeIs('profile.*') ? 'active' : '' }}"
+                           style="color: {{ request()->routeIs('profile.*') ? 'white' : '#a0a6b5' }} !important;
+                                  background: {{ request()->routeIs('profile.*') ? '#4f46e5' : 'transparent' }};">
+                            <i class="bi bi-person me-2"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-100 text-start py-2 px-3 rounded border-0 bg-transparent"
+                                    style="color: #a0a6b5;">
+                                <i class="bi bi-box-arrow-right me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content Column -->
+        <div class="col-md-9 col-lg-10">
+            <div class="p-4">
+                @yield('inner-content')
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-item a:hover, .nav-item button:hover {
+        background: #2d3340 !important;
+        color: white !important;
+    }
+    .nav-item a.active {
+        background: #4f46e5 !important;
+        color: white !important;
+    }
+    .nav-item button:hover {
+        color: white !important;
+    }
+</style>
+@endsection

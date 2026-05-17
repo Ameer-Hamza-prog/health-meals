@@ -1,100 +1,44 @@
 @extends('layouts.admindashboard')
 
-@section('contact')
-<div class="container my-5" style="max-width: 700px;">
-    <h2 class="mb-4 text-primary fw-bold text-center">تعديل بيانات المطعم</h2>
-
-    @if ($errors->any())
-        <div class="alert alert-danger rounded shadow-sm">
-            <ul class="mb-0 ps-3">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('restaurants.update', $restaurant) }}" method="POST" enctype="multipart/form-data" class="p-4 bg-light rounded shadow-sm">
-        @csrf
-        @method('PUT')
-
-        <div class="mb-4">
-            <label for="name" class="form-label fw-semibold">اسم المطعم</label>
-            <input type="text" class="form-control form-control-lg rounded-3" id="name" name="name" value="{{ old('name', $restaurant->name) }}" required>
+@section('content')
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Edit Restaurant</h2>
+                <p class="text-gray-500 text-sm">Update restaurant information</p>
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label for="owner_name" class="form-label fw-semibold">اسم صاحب المطعم</label>
-            <input type="text" class="form-control form-control-lg rounded-3" id="owner_name" name="owner_name" value="{{ old('owner_name', $restaurant->owner_name) }}" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="email" class="form-label fw-semibold">البريد الإلكتروني</label>
-            <input type="email" class="form-control form-control-lg rounded-3" id="email" name="email" value="{{ old('email', $restaurant->email) }}" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="phone" class="form-label fw-semibold">رقم الهاتف</label>
-            <input type="text" class="form-control form-control-lg rounded-3" id="phone" name="phone" value="{{ old('phone', $restaurant->phone) }}" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="address" class="form-label fw-semibold">العنوان</label>
-            <textarea class="form-control form-control-lg rounded-3" id="address" name="address" rows="3" required>{{ old('address', $restaurant->address) }}</textarea>
-        </div>
-
-        <div class="mb-4">
-            <label for="license" class="form-label fw-semibold">رفع رخصة مزاولة المهنة (اختياري)</label>
-            <input type="file" class="form-control form-control-lg rounded-3" id="license" name="license" >
-            @if($restaurant->license_path)
-                <small class="text-muted d-block mt-1">الرخصة الحالية:
-                    <a href="{{ asset('storage/' . $restaurant->license_path) }}" target="_blank" class="text-decoration-none">عرض الرخصة</a>
-                </small>
-            @endif
-        </div>
-
-        <div class="mb-4">
-            <label for="diet_id" class="form-label fw-semibold">النظام الغذائي</label>
-            <select class="form-select form-select-lg rounded-3" id="diet_id" name="diet_id" required>
-                <option value="" disabled {{ old('diet_id', $restaurant->diet_id) ? '' : 'selected' }}>اختر النظام الغذائي</option>
-                @foreach($diets as $diet)
-                    <option value="{{ $diet->id }}" @selected(old('diet_id', $restaurant->diet_id) == $diet->id)>{{ $diet->name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <hr class="my-4">
-
-        <h5 class="mb-3 fw-bold text-secondary">تحديث بيانات الدخول</h5>
-
-        <div class="mb-4">
-            <label for="username" class="form-label fw-semibold">اسم المستخدم</label>
-            <input type="text" class="form-control form-control-lg rounded-3" id="username" name="username" value="{{ old('username', $restaurant->username) }}" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="password" class="form-label fw-semibold">كلمة المرور (اتركها فارغة إذا لا تريد التغيير)</label>
-            <input type="password" class="form-control form-control-lg rounded-3" id="password" name="password" autocomplete="new-password">
-        </div>
-
-        <div class="mb-4">
-            <label for="password_confirmation" class="form-label fw-semibold">تأكيد كلمة المرور</label>
-            <input type="password" class="form-control form-control-lg rounded-3" id="password_confirmation" name="password_confirmation" autocomplete="new-password">
-        </div>
-
-        <div class="mb-4">
-            <label for="status" class="form-label fw-semibold">حالة التفعيل</label>
-            <select name="status" id="status" class="form-select form-select-lg rounded-3" required>
-                <option value="pending" @selected(old('status', $restaurant->status) == 'pending')>قيد الانتظار</option>
-                <option value="approved" @selected(old('status', $restaurant->status) == 'approved')>مفعل</option>
-                <option value="rejected" @selected(old('status', $restaurant->status) == 'rejected')>مرفوض</option>
-            </select>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center">
-            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm">تحديث</button>
-            <a href="{{ route('restaurants.index') }}" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">إلغاء</a>
-        </div>
-    </form>
+        <form action="{{ route('restaurants.update', $restaurant->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Restaurant Name</label>
+                    <input type="text" name="name" value="{{ $restaurant->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <input type="text" name="location" value="{{ $restaurant->location }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500">{{ $restaurant->description }}</textarea>
+                </div>
+                
+                <div class="pt-4 border-t border-gray-100 flex gap-3">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg transition">Update Restaurant</button>
+                    <a href="{{ route('restaurants.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg transition">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
