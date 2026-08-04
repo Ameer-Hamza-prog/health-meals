@@ -1,6 +1,6 @@
 @extends('layouts.restaurant')
 
-@section('contact')
+@section('content')
 <div class="container" style="max-width: 600px; margin: 40px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
 
     <h2 style="font-weight: 700; font-size: 26px; margin-bottom: 25px; color: #2c3e50;">➕ إضافة منتج جديد</h2>
@@ -15,7 +15,7 @@
         </div>
     @endif
 
-    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" style="background: #f9fafb; padding: 25px 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+    <form action="{{ route('restaurant.products.store') }}" method="POST" enctype="multipart/form-data" style="background: #f9fafb; padding: 25px 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
         @csrf
 
         <label for="name" style="font-weight: 600; color: #34495e;">اسم المنتج:</label><br>
@@ -41,7 +41,7 @@
     </form>
 
     <br>
-    <a href="{{ route('products.index') }}" style="color: #2980b9; font-weight: 600; text-decoration: none; font-size: 15px;">
+    <a href="{{ route('restaurant.products.index') }}" style="color: #2980b9; font-weight: 600; text-decoration: none; font-size: 15px;">
         ⬅ العودة إلى قائمة المنتجات
     </a>
 </div>

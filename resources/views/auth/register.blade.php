@@ -1,50 +1,59 @@
-@extends('layouts.guest')
+﻿
+@extends("layouts.guest")
 
-@section('content')
-    <form method="POST" action="{{ route('register') }}">
+@section("content")
+<div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 mx-auto mt-10 mb-10">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Create Account</h1>
+        <p class="text-gray-600 mt-2">Join FitEats to start your health journey</p>
+    </div>
+
+    <form method="POST" action="{{ route("register") }}">
         @csrf
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
-                   name="name" value="{{ old('name') }}" required autofocus>
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
+        <div class="mb-5">
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input id="name" type="text" name="name" value="{{ old("name") }}" required autofocus
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 @error("name") border-red-500 @enderror">
+            @error("name")
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="email" class="form-label">Email Address</label>
-            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
-                   name="email" value="{{ old('email') }}" required>
-            @error('email')
-                <div class="invalid-feedback">{{ $message }}</div>
+        <div class="mb-5">
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input id="email" type="email" name="email" value="{{ old("email") }}" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 @error("email") border-red-500 @enderror">
+            @error("email")
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-                   name="password" required>
-            @error('password')
-                <div class="invalid-feedback">{{ $message }}</div>
+        <div class="mb-5">
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input id="password" type="password" name="password" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 @error("password") border-red-500 @enderror">
+            @error("password")
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Confirm Password</label>
-            <input id="password_confirmation" type="password" class="form-control" 
-                   name="password_confirmation" required>
+        <div class="mb-6">
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500">
         </div>
 
-        <div class="d-flex justify-content-between align-items-center">
-            <a href="{{ route('login') }}" class="text-decoration-none">
-                Already registered?
-            </a>
-            
-            <button type="submit" class="btn btn-primary px-4">
-                Register
-            </button>
-        </div>
+        <button type="submit"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl transition">
+            Register
+        </button>
     </form>
+
+    <p class="text-center text-sm text-gray-600 mt-6">
+        Already registered? 
+        <a href="{{ route("login") }}" class="text-emerald-600 hover:underline font-medium">Log in</a>
+    </p>
+</div>
 @endsection
+

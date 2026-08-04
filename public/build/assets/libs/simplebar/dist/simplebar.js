@@ -1,1 +1,0 @@
-// SimpleBar placeholder

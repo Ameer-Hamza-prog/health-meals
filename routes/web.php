@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Restaurant;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DietController;
@@ -62,13 +66,13 @@ Route::get('/restaurant/join/pending', function () {
 })->name('restaurants.join.pending');
 
 // Restaurant login
-Route::get('/restaurant/restaurant/login', [RestaurantController::class, 'showLoginForm'])->name('restaurant.login');
-Route::post('/restaurant/restaurant/login', [RestaurantController::class, 'loginrestrunts'])->name('restaurant.login.submit');
+Route::get('/restaurant/login', [RestaurantController::class, 'showLoginForm'])->name('restaurant.login');
+Route::post('/restaurant/login', [RestaurantController::class, 'loginrestrunts'])->name('restaurant.login.submit');
 
 // ======================
 // RESTAURANT AUTHENTICATED ROUTES
 // ======================
-Route::prefix('restaurant')->name('restaurant.')->group(function () {
+Route::prefix('restaurant')->name('restaurant.')->middleware(['restaurant'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [RestaurantDashboardController::class, 'index'])->name('dashboard');
     
@@ -81,15 +85,15 @@ Route::prefix('restaurant')->name('restaurant.')->group(function () {
     // Logout
     Route::post('/logout', [RestaurantDashboardController::class, 'logout'])->name('logout');
     
+    // Products CRUD
+    Route::get('/my-products', [\App\Http\Controllers\Restaurant\ProductController::class, 'index'])->name('products.index');
+    Route::get('/my-products/create', [\App\Http\Controllers\Restaurant\ProductController::class, 'create'])->name('products.create');
+    Route::post('/my-products', [\App\Http\Controllers\Restaurant\ProductController::class, 'store'])->name('products.store');
+    Route::get('/my-products/{product}/edit', [\App\Http\Controllers\Restaurant\ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/my-products/{product}', [\App\Http\Controllers\Restaurant\ProductController::class, 'update'])->name('products.update');
+    Route::delete('/my-products/{product}', [\App\Http\Controllers\Restaurant\ProductController::class, 'destroy'])->name('products.destroy');
+    
     // Additional restaurant pages
-    Route::get('/my-products', function() { 
-        return view('restaurant.products.index', ['title' => 'منتجاتي']); 
-    })->name('products.index');
-    
-    Route::get('/my-products/create', function() { 
-        return view('restaurant.products.create', ['title' => 'إضافة منتج جديد']); 
-    })->name('products.create');
-    
     Route::get('/orders', function() { 
         return view('restaurant.orders.index', ['title' => 'طلباتي']); 
     })->name('orders.index');
@@ -139,3 +143,32 @@ Route::get('/check-auth-debug', function() {
 Route::get('/auth-check', function() {
     return view('auth-check');
 });
+
+// ======================
+// DEMO LOGIN ROUTE
+// ======================
+Route::get('/demo-login/{role}', function (string $role) {
+    // Find the demo user by role
+    $user = User::where('role', $role)->first();
+
+    if (!$user) {
+        return back()->with('error', 'Demo user for this role does not exist.');
+    }
+
+    Auth::login($user);
+    request()->session()->regenerate();
+
+    // Redirect based on role
+    if ($role === 'restaurant') {
+        $restaurant = Restaurant::where('user_id', $user->id)->first() 
+                   ?? Restaurant::first();
+
+        if ($restaurant) {
+            session(['restaurant_id' => $restaurant->id]);
+        }
+
+        return redirect()->route('restaurant.dashboard');
+    }
+
+    return redirect('/dashboard');
+})->name('demo.login');

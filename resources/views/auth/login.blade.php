@@ -57,5 +57,29 @@
         Don`t have an account? 
         <a href="{{ route("register") }}" class="text-emerald-600 hover:underline font-medium">Register here</a>
     </p>
+
+    <!-- One-Click Demo Logins -->
+    <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+        <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-3">
+            ⚡ Quick Portfolio Demo Logins
+        </p>
+        
+        <div class="flex flex-wrap gap-2 justify-center">
+            <a href="{{ route('demo.login', 'restaurant') }}" 
+               class="inline-flex items-center px-3 py-1.5 bg-indigo-50 border border-indigo-200 rounded-md text-xs font-medium text-indigo-700 hover:bg-indigo-100 transition">
+                🍽️ Demo Restaurant
+            </a>
+
+            <a href="{{ route('demo.login', 'customer') }}" 
+               class="inline-flex items-center px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-md text-xs font-medium text-emerald-700 hover:bg-emerald-100 transition">
+                👤 Demo Customer
+            </a>
+
+            <a href="{{ route('demo.login', 'admin') }}" 
+               class="inline-flex items-center px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-md text-xs font-medium text-amber-700 hover:bg-amber-100 transition">
+                🛡️ Demo Admin
+            </a>
+        </div>
+    </div>
 </div>
 @endsection

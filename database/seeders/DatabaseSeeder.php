@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Restaurant;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +14,52 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Demo Restaurant Account (User)
+        $restaurantUser = User::firstOrCreate(
+            ['email' => 'restaurant@healthmeals.com'],
+            [
+                'name' => 'Healthy Bites Owner',
+                'password' => Hash::make('password'),
+                'role' => 'restaurant',
+            ]
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // 2. Demo Restaurant Profile (Linked to User ID)
+        Restaurant::firstOrCreate(
+            ['user_id' => $restaurantUser->id],
+            [
+                'name' => 'Healthy Bites',
+                'email' => 'restaurant@healthmeals.com',
+            ]
+        );
+
+        // 3. Demo Customer Account
+        User::firstOrCreate(
+            ['email' => 'customer@healthmeals.com'],
+            [
+                'name' => 'John Customer',
+                'password' => Hash::make('password'),
+                'role' => 'customer',
+            ]
+        );
+
+        // 4. Demo Admin Account
+        User::firstOrCreate(
+            ['email' => 'admin@healthmeals.com'],
+            [
+                'name' => 'System Admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
+
+        if ($this->command) {
+            $this->command->info('--------------------------------------------');
+            $this->command->info('  Demo Accounts Created Successfully:');
+            $this->command->info('  Restaurant: restaurant@healthmeals.com / password');
+            $this->command->info('  Customer:   customer@healthmeals.com / password');
+            $this->command->info('  Admin:      admin@healthmeals.com / password');
+            $this->command->info('--------------------------------------------');
+        }
     }
 }

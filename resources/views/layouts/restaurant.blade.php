@@ -1,246 +1,54 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@yield('title', 'Restaurant Dashboard')</title>
-
-    <!-- THEME CSS -->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('build/assets/images/logos/seodashlogo.png') }}" />
-    <link rel="stylesheet" href="{{ asset('build/assets/css/styles.min.css') }}" />
-    
-    <style>
-        /* Fix sidebar width and layout */
-        .left-sidebar {
-            width: 280px;
-            position: fixed;
-            top: 0;
-            right: 0;
-            height: 100vh;
-            background: linear-gradient(180deg, #1a1e2b 0%, #2d3340 100%);
-            z-index: 100;
-            overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .body-wrapper {
-            margin-right: 280px;
-            width: calc(100% - 280px);
-            min-height: 100vh;
-            background: #f8f9fa;
-        }
-
-        /* Brand logo */
-        .brand-logo {
-            padding: 25px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .brand-logo img {
-            max-height: 45px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-
-        /* Sidebar navigation */
-        .sidebar-nav {
-            padding: 20px 0;
-        }
-
-        #sidebarnav {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-small-cap {
-            padding: 20px 20px 8px 20px;
-            color: #a0a6b5;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .nav-small-cap i {
-            margin-left: 8px;
-            font-size: 1rem;
-            color: #fd746c;
-        }
-
-        .sidebar-item {
-            margin: 2px 10px;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            color: #a0a6b5;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .sidebar-link i {
-            margin-left: 12px;
-            font-size: 1.2rem;
-            color: #a0a6b5;
-            transition: all 0.3s;
-        }
-
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            transform: translateX(-5px);
-        }
-
-        .sidebar-link:hover i {
-            color: #fd746c;
-        }
-
-        .sidebar-link.active {
-            background: linear-gradient(135deg, #fd746c 0%, #ff9068 100%);
-            color: white;
-            box-shadow: 0 5px 15px rgba(253,116,108,0.3);
-        }
-
-        .sidebar-link.active i {
-            color: white;
-        }
-
-        .hide-menu {
-            flex: 1;
-        }
-
-        /* Header */
-        .app-header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 15px 25px;
-            margin-bottom: 20px;
-            border-radius: 0 0 15px 15px;
-        }
-
-        /* Container */
-        .container-fluid {
-            padding: 20px 25px;
-        }
-
-        /* Scrollbar */
-        .left-sidebar::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .left-sidebar::-webkit-scrollbar-track {
-            background: #2d3340;
-        }
-
-        .left-sidebar::-webkit-scrollbar-thumb {
-            background: #fd746c;
-            border-radius: 10px;
-        }
-
-        /* Logout button */
-        .sidebar-item form button.sidebar-link {
-            background: transparent;
-            border: none;
-            width: 100%;
-            text-align: right;
-            cursor: pointer;
-        }
-
-        .sidebar-item form button.sidebar-link:hover {
-            background: #c0392b;
-        }
-
-        .sidebar-item.mt-4 {
-            margin-top: 30px;
-        }
-
-        /* Responsive */
-        @media (max-width: 1199px) {
-            .left-sidebar {
-                transform: translateX(100%);
-                transition: transform 0.3s;
-            }
-            .left-sidebar.show {
-                transform: translateX(0);
-            }
-            .body-wrapper {
-                margin-right: 0;
-                width: 100%;
-            }
-            .app-header {
-                right: 0;
-            }
-        }
-
-        /* Cards styling */
-        .card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .badge.bg-success { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
-        .badge.bg-warning { background: linear-gradient(135deg, #f39c12, #f1c40f) !important; color: white; }
-        .badge.bg-primary { background: linear-gradient(135deg, #fd746c, #ff9068) !important; }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="bg-gray-50 font-sans antialiased">
+    <div class="min-h-screen flex bg-gray-50">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-gray-900 text-white hidden md:flex flex-col fixed inset-y-0 left-0 z-50 shadow-lg">
+            <div class="p-6 border-b border-gray-800 flex items-center justify-between">
+                <span class="text-xl font-bold tracking-wide">Restaurant Dashboard</span>
+            </div>
+            <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+                <a href="{{ url('/restaurant/dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->is('restaurant/dashboard*') ? 'bg-emerald-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url('/restaurant/my-products') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->is('restaurant/my-products*') ? 'bg-emerald-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    <span>Products</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-800">
+                <form method="POST" action="{{ route('restaurant.logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition">
+                        <span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
 
-<div class="page-wrapper" id="main-wrapper"
-     data-layout="vertical"
-     data-navbarbg="skin6"
-     data-sidebartype="full"
-     data-sidebar-position="fixed"
-     data-header-position="fixed">
+        <!-- Main Content Area -->
+        <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
+            <header class="bg-white border-b border-gray-100 h-16 flex items-center justify-between px-8 shadow-sm">
+                <h2 class="text-lg font-bold text-gray-800">@yield('title')</h2>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('restaurant.profile.edit') }}" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition">
+                        <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        </div>
+                        <span>Profile</span>
+                    </a>
+                </div>
+            </header>
 
-    {{-- SIDEBAR --}}
-    @include('layouts.restaurant.sidebar')
-
-    <div class="body-wrapper">
-        {{-- HEADER --}}
-        @include('layouts.restaurant.header')
-
-        <div class="container-fluid">
-            @yield('content')
+            <main class="flex-1 p-8">
+                @yield('content')
+            </main>
         </div>
     </div>
-</div>
-
-<!-- THEME JS -->
-<script src="{{ asset('build/assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ asset('build/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('build/assets/js/app.min.js') }}"></script>
-
-<script>
-    // Sidebar toggle for mobile
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebarToggle = document.getElementById('sidebarCollapse');
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', function() {
-                document.querySelector('.left-sidebar').classList.toggle('show');
-            });
-        }
-    });
-</script>
-
 </body>
 </html>

@@ -1,80 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
-use App\Models\Restaurant;
-
-class RestaurantDashboardController extends Controller
+return new class extends Migration
 {
-    public function index()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        return view('restaurant.dashboard');
+        Schema::create('restaurants', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('owner_name')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->text('address')->nullable();
+            $table->foreignId('diet_id')->nullable()->constrained('diets')->onDelete('set null');
+            $table->string('username')->unique()->nullable();
+            $table->string('password')->nullable();
+            $table->string('license_path')->nullable();
+            $table->timestamps();
+        });
     }
 
-    public function logout(Request $request)
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('login');
+        Schema::dropIfExists('restaurants');
     }
-
-    public function editProfile()
-    {
-        $restaurant = Restaurant::find(Auth::id());
-
-        if (!$restaurant) {
-            abort(404, 'المطعم غير موجود');
-        }
-
-        return view('restaurant.edit', compact('restaurant'));
-    }
-
-    public function updateProfile(Request $request)
-    {
-        $restaurant = Restaurant::find(Auth::id());
-
-        if (!$restaurant) {
-            abort(404, 'المطعم غير موجود');
-        }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'owner_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:restaurants,email,' . $restaurant->id,
-            'phone' => 'required|string|max:20',
-            'address' => 'required|string',
-            'diet_id' => 'required|exists:diets,id',
-            'username' => 'required|string|unique:restaurants,username,' . $restaurant->id,
-            'password' => 'nullable|confirmed|min:6',
-            'license_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
-
-        $restaurant->name = $request->name;
-        $restaurant->owner_name = $request->owner_name;
-        $restaurant->email = $request->email;
-        $restaurant->phone = $request->phone;
-        $restaurant->address = $request->address;
-        $restaurant->diet_id = $request->diet_id;
-        $restaurant->username = $request->username;
-
-        if ($request->filled('password')) {
-            $restaurant->password = Hash::make($request->password);
-        }
-
-        if ($request->hasFile('license_file')) {
-            // يمكنك حذف الملف القديم إذا أردت (اختياري)
-            $path = $request->file('license_file')->store('licenses', 'public');
-            $restaurant->license_path = $path;
-        }
-
-        $restaurant->save();
-
-        return redirect()->route('restaurant.profile.edit')->with('success', 'تم تحديث البيانات بنجاح');
-    }
-}
+};
