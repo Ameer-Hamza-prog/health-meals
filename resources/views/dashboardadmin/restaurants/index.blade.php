@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">?? Restaurant Management</h1>
+        <h1 class="text-2xl font-bold text-gray-800">🍽️ Restaurant Management</h1>
         <a href="{{ route('restaurants.create') }}" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg">+ Add Restaurant</a>
     </div>
 
@@ -11,7 +11,7 @@
         @foreach($restaurants as $restaurant)
         <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition p-6 border-l-4 border-orange-500">
             <div class="flex items-center gap-3 mb-2">
-                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-xl">???</div>
+                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-xl">🍴</div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-800">{{ $restaurant->name }}</h3>
                     <p class="text-gray-500 text-sm">{{ $restaurant->location ?? 'Location not set' }}</p>

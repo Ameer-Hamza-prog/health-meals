@@ -4,7 +4,7 @@
 <div class="container mx-auto">
     <!-- Welcome Banner -->
     <div class="bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-xl p-8 mb-8 text-white shadow-lg">
-        <h1 class="text-3xl font-bold">Welcome Back, {{ Auth::user()->name }} ??</h1>
+        <h1 class="text-3xl font-bold">Welcome Back, {{ Auth::user()->name }} 👋</h1>
         <p class="mt-2 text-emerald-100">You are logged in as {{ Auth::user()->role }}.</p>
     </div>
 
