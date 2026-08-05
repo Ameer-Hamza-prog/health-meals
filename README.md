@@ -33,7 +33,18 @@ This project was built as part of my **Laravel Portfolio** to demonstrate clean 
 
 ## 📸 Screenshots
 
-*(You will add screenshots here later)*
+### Homepage
+![Homepage](docs/screenshots/homepage.png)
+
+### Admin Dashboard
+![Admin Dashboard 1](docs/screenshots/admin-dashboard-1.png)
+![Admin Dashboard 2](docs/screenshots/admin-dashboard-2.png)
+
+### Admin - User Management
+![Admin Users](docs/screenshots/admin-users.png)
+
+### Restaurant Dashboard
+![Restaurant Dashboard](docs/screenshots/restaurant-dashboard.png)
 
 ## 🚀 How to Run Locally
 
