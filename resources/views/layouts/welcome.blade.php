@@ -35,20 +35,38 @@
         display: inline-block !important;
         border-radius: 6px !important;
         transition: all 0.2s ease !important;
-        
+
         /* Make all buttons same red color */
         border: 2px solid #dc2626 !important;
         background: transparent !important;
         color: #dc2626 !important;
         margin: 0 5px !important;
     }
-    
+
     body.index-page #header .auth-buttons .auth-btn:hover {
         background: #dc2626 !important;
         color: white !important;
         transform: translateY(-2px) !important;
     }
-    
+
+    body.index-page #header .auth-buttons .auth-startbadge {
+        border: 2px solid #16a34a !important;
+        background: #16a34a !important;
+        color: white !important;
+        animation: startbadge-pulse 2s infinite;
+    }
+
+    body.index-page #header .auth-buttons .auth-startbadge:hover {
+        background: #15803d !important;
+        border-color: #15803d !important;
+        transform: translateY(-2px) !important;
+    }
+
+    @keyframes startbadge-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.5); }
+        50% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+    }
+
     /* Make sure we don't affect any other pages */
     body:not(.index-page) .auth-btn,
     .guest-layout .auth-btn,
@@ -77,23 +95,6 @@
           <li><a href="#events">Events</a></li>
           <li><a href="#chefs">Chefs</a></li>
           <li><a href="#gallery">Gallery</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li>
           <li><a href="#contact">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -103,6 +104,7 @@
       <div class="auth-buttons">
         <a href="{{ route('login') }}" class="auth-btn auth-login">Login</a>
         <a href="{{ route('register') }}" class="auth-btn auth-register">Register</a>
+        <a href="{{ route('login') }}" class="auth-btn auth-startbadge">👋 Start Here: Demo Login</a>
         <a href="{{ route('restaurant.login') }}" class="auth-btn auth-restaurant">Restaurant</a>
       </div>
 
@@ -151,10 +153,6 @@
         <div class="col-lg-3 col-md-6">
           <h4>Follow Us</h4>
           <div class="social-links d-flex">
-            <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
           </div>
         </div>
 
